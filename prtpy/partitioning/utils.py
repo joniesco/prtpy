@@ -14,10 +14,10 @@ class Node:
     def __init__(self,depth, cur_set, cur_set_sum, remaining_sums):
         self.depth = depth
         self.cur_set = cur_set
-        self.cur_set_sum = cur_set_sum
+        self.cur_set_sum = cur_set_sum #
         self.left = None
         self.right = None
-        self.remaining_sums = remaining_sums
+        self.remaining_sums = remaining_sums #
 
 
 class InExclusionBinTree:
@@ -26,7 +26,8 @@ class InExclusionBinTree:
         self.items = sorted(items, key=valueof, reverse=True)
         self.leaf_depth = len(items)
         self.valueof = valueof
-        self.total_sum = sum(map(self.valueof, self.items))
+        self.items_values = list(map(self.valueof, self.items))
+        self.total_sum = sum(self.items_values)
         self.upper_bound = upper_bound
         self.lower_bound = lower_bound
         self.root = Node(0, [], 0, self.total_sum)  # root
@@ -34,10 +35,11 @@ class InExclusionBinTree:
     # inclusion
     def add_right(self, parent: Node):
         item_to_add = self.items[parent.depth]
+        valueof_item_to_add = self.items_values[parent.depth]
         parent.right = Node(depth=parent.depth+1,
                             cur_set=parent.cur_set + [item_to_add],
-                            cur_set_sum=parent.cur_set_sum + self.valueof(item_to_add),
-                            remaining_sums=parent.remaining_sums - self.valueof(item_to_add))
+                            cur_set_sum=parent.cur_set_sum + valueof_item_to_add,
+                            remaining_sums=parent.remaining_sums - valueof_item_to_add)
 
     # exclusion
     def add_left(self, parent: Node):
